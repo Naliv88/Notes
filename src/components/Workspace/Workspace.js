@@ -2,15 +2,13 @@ import React, { useContext } from 'react';
 import { NotesContext } from '../../context/notesContext';
 
 const Workspace = () => {
-  const { notes } = useContext(NotesContext);
+  const { currentNote } = useContext(NotesContext);
 
-  console.log(notes);
+  console.log(currentNote);
   return (
     <div className="workspace">
-      {/* Note title */}
-      <h1>Title</h1>
-
       {/* Markdown content */}
+      {currentNote && <p>{currentNote.body}</p>}
       <div className="content">Content</div>
     </div>
   );

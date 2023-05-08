@@ -11,9 +11,7 @@ function Header({ children }) {
       <div>
         <div className={style.headerConteiner}>
           <div className={style.buttonConteiner}>
-            <button className={style.headerButton} disabled={!currentNote}>
-              &#43;
-            </button>
+            <button className={style.headerButton}>&#43;</button>
             <button className={style.headerButton} disabled={!currentNote}>
               &#x1F5D1;
             </button>

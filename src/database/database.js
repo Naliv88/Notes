@@ -16,9 +16,7 @@ async function openNotesDB() {
         });
         notesStore.createIndex('title', 'title', { unique: false });
         notesStore.createIndex('body', 'body', { unique: false });
-        notesStore.createIndex('time', 'time', {
-          unique: false,
-        });
+        notesStore.createIndex('time', 'time', { unique: false });
 
         // додати три початкові нотатки
         notesStore.add({ title: 'Нотатка 1', body: 'Текст нотатки 1' });
@@ -31,9 +29,11 @@ async function openNotesDB() {
 
 // додає нову нотатку до бази даних
 async function addNoteToDB(note) {
+  const time = Date.now();
+  const noteWithTime = { ...note, time };
   const db = await openNotesDB();
   const tx = db.transaction(NOTES_STORE_NAME, 'readwrite');
-  await tx.store.add(note);
+  await tx.store.add(noteWithTime);
   await tx.done;
 }
 

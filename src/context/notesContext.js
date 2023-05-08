@@ -23,13 +23,11 @@ export const NotesProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (searchFilter !== '') {
-      setFilteredNotes(
-        notes.filter(note =>
-          note.title.toLowerCase().includes(searchFilter.toLowerCase())
-        )
-      );
-    }
+    setFilteredNotes(
+      notes.filter(note =>
+        note.title.toLowerCase().includes(searchFilter.toLowerCase())
+      )
+    );
   }, [searchFilter, notes]);
 
   const addNote = newNote => {

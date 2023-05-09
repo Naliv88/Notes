@@ -14,14 +14,26 @@ async function openNotesDB() {
           keyPath: 'id',
           autoIncrement: true,
         });
-        notesStore.createIndex('title', 'title', { unique: false });
-        notesStore.createIndex('body', 'body', { unique: false });
-        notesStore.createIndex('time', 'time', { unique: false });
 
         // додати три початкові нотатки
-        notesStore.add({ title: 'Нотатка 1', body: 'Текст нотатки 1' });
-        notesStore.add({ title: 'Нотатка 2', body: 'Текст нотатки 2' });
-        notesStore.add({ title: 'Нотатка 3', body: 'Текст нотатки 3' });
+        notesStore.add({
+          title: 'Нотатка 1',
+          body: 'Текст нотатки 1',
+          time: 1683653676766,
+          id: '_J0-BZ',
+        });
+        notesStore.add({
+          title: 'Нотатка 2',
+          body: 'Текст нотатки 2',
+          time: 1683653676766,
+          id: '_J0-B2',
+        });
+        notesStore.add({
+          title: 'Нотатка 3',
+          body: 'Текст нотатки 3',
+          time: 1683653676766,
+          id: '_J0-B3',
+        });
       }
     },
   });
@@ -29,11 +41,12 @@ async function openNotesDB() {
 
 // додає нову нотатку до бази даних
 async function addNoteToDB(note) {
-  const time = Date.now();
-  const noteWithTime = { ...note, time };
+  console.log('Додаємо нотатку до бази даних:', note);
   const db = await openNotesDB();
   const tx = db.transaction(NOTES_STORE_NAME, 'readwrite');
-  await tx.store.add(noteWithTime);
+  console.log('Транзакція створена:', tx);
+  await tx.store.add(note);
+  console.log('Нотатку додано до бази даних.');
   await tx.done;
 }
 

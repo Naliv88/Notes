@@ -3,7 +3,7 @@ import { NotesContext } from '../../context/notesContext';
 import ListItem from '../ListItem/ListItem';
 
 const Sidebar = () => {
-  const { notes, setCurrentNote, filteredNotes } = useContext(NotesContext);
+  const { setCurrentNote, filteredNotes } = useContext(NotesContext);
   const [selectedNote, setSelectedNote] = useState(null);
 
   const handleNoteClick = note => {

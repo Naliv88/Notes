@@ -11,3 +11,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.active {
+  background-color: grey;
+}
+
+
+.workSpace {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+
+body.modal-open {
+  overflow: hidden;
+}

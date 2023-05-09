@@ -1,64 +1,55 @@
-import { useContext, useEffect, useState } from 'react';
-import { Modal, Button } from 'react-bootstrap';
-import { getAllNotesFromDB } from '../../database/database';
+import React, { useState, useEffect, useRef } from 'react';
+import style from './Modal.module.css';
 
-function DeleteModal(props) {
-  const [show, setShow] = useState(false);
-  const { notes, addNote } = useContext();
-  console.log(notes);
-
-  const [note, setNotes] = useState([notes]);
-
-  console.log(note);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+export default function Modal({ isOpen, onClose, children }) {
+  const modalContainerRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const escapeListener = evt => {
-      if (evt.code === 'Escape') {
-        handleClose();
+    function onClickOutsideHandler(event) {
+      if (
+        modalContainerRef.current &&
+        !modalContainerRef.current.contains(event.target)
+      ) {
+        onClose();
       }
-    };
-    document.querySelector('html').style.overflow = 'hidden';
-    window.addEventListener('keydown', escapeListener);
+    }
+
+    function onEscHandler(event) {
+      if (isOpen && event.keyCode === 27) {
+        onClose();
+      }
+    }
+
+    if (isOpen) {
+      setIsModalOpen(true);
+      document.body.classList.add('modal-open');
+      document.addEventListener('click', onClickOutsideHandler);
+      document.addEventListener('keydown', onEscHandler);
+    } else {
+      setIsModalOpen(false);
+      document.body.classList.remove('modal-open');
+      document.removeEventListener('click', onClickOutsideHandler);
+      document.removeEventListener('keydown', onEscHandler);
+    }
 
     return () => {
-      document.querySelector('html').style.overflow = 'visible';
-      window.removeEventListener('keydown', escapeListener);
+      document.body.classList.remove('modal-open');
+      document.removeEventListener('click', onClickOutsideHandler);
+      document.removeEventListener('keydown', onEscHandler);
     };
-  }, [show]);
-
-  const handleOverlayClick = evt => {
-    console.log(evt);
-    if (evt.target === evt.currentTarget) {
-      console.log('delete');
-      handleClose();
-    }
-  };
+  }, [isOpen, onClose]);
 
   return (
-    <>
-      <Button variant="danger" onClick={handleShow}>
-        Видалити
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Підтвердження видалення</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Ви впевнені, що хочете видалити цей елемент?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Закрити
-          </Button>
-          <Button variant="danger" onClick={handleOverlayClick}>
-            Видалити
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    isModalOpen && (
+      <div className={style.modalOverlay}>
+        <div className={style.modalContainer} ref={modalContainerRef}>
+          <div className={style.modalBody}>{children}</div>
+          <button className={style.modalCloseButton} onClick={onClose}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    )
   );
 }
-
-export default DeleteModal;

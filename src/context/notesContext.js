@@ -6,22 +6,28 @@ import {
   getAllNotesFromDB,
   updateNoteInDB,
 } from '../database/database';
+import { nanoid } from 'nanoid';
 
+// Створюємо контекст для передачі даних між компонентами
 export const NotesContext = createContext();
 
+// Створюємо провайдер для забезпечення доступу до даних в контексті
 export const NotesProvider = ({ children }) => {
+  // Створюємо стейти для зберігання нотаток, поточної нотатки, рядка пошуку, фільтрованого масиву нотаток
   const [notes, setNotes] = useState([]);
   const [currentNote, setCurrentNote] = useState(null);
   const [searchFilter, setSearchFilter] = useState('');
-
   const [filteredNotes, setFilteredNotes] = useState([]);
 
+  // Виконуємо запит до бази даних для отримання всіх нотаток при монтуванні компонента
   useEffect(() => {
     getAllNotesFromDB().then(notes => {
+      console.log(notes);
       setNotes(notes);
     });
   }, []);
 
+  // Оновлюємо фільтрований масив нотаток при зміні рядка пошуку або нотаток
   useEffect(() => {
     setFilteredNotes(
       notes.filter(note =>
@@ -30,22 +36,30 @@ export const NotesProvider = ({ children }) => {
     );
   }, [searchFilter, notes]);
 
+  // Функція для додавання нової нотатки
   const addNote = newNote => {
-    setNotes([...notes, newNote]);
-    addNoteToDB([...notes, newNote]);
+    const id = nanoid(6);
+    const time = Date.now();
+    const noteWithTime = { ...newNote, time, id };
+    setNotes([...notes, noteWithTime]);
+    addNoteToDB(noteWithTime);
   };
 
-  const editNote = (noteIndex, updatedNote) => {
+  // Функція для редагування нотатки
+  const editNote = editNote => {
     const updatedNotes = [...notes];
-    updatedNotes[noteIndex] = updatedNote;
+    const index = updatedNotes.findIndex(note => note.id === editNote.id);
+    updatedNotes[index] = editNote;
+    console.log(updatedNotes);
     setNotes(updatedNotes);
-    updateNoteInDB(updatedNotes);
+    updateNoteInDB(editNote);
   };
 
-  const deleteNote = noteIndex => {
-    const updatedNotes = notes.filter((note, index) => index !== noteIndex);
+  // Функція для видалення нотатки
+  const deleteNote = noteId => {
+    const updatedNotes = notes.filter(note => note.id !== noteId);
     setNotes(updatedNotes);
-    deleteNoteFromDB(updatedNotes);
+    deleteNoteFromDB(noteId);
   };
 
   return (

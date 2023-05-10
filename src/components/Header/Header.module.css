@@ -44,3 +44,33 @@ body.modal-open {
 .modal-open {
     overflow: hidden;
 }
+
+.buttonHeader {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 10px;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.buttonHeader:hover{
+    opacity: 0.5;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+
+
+.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.svgHeader {
+    position: relative;
+        z-index: -1;
+    width: 25px;
+    height: 25px;
+    padding: 5px;
+    /* border: 1px solid black; */
+}

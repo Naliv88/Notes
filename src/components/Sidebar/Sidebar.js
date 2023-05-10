@@ -15,7 +15,7 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      <ul>
+      <div>
         {filteredNotes.map(note => (
           <ListItem
             key={note.id}
@@ -26,17 +26,7 @@ const Sidebar = () => {
             }
           />
         ))}
-      </ul>
-      {/* {notes.map(note => (
-        <ListItem
-          key={note.id}
-          note={note}
-          onClick={() => handleNoteClick(note)}
-          className={
-            selectedNote && selectedNote.id === note.id ? 'active' : ''
-          }
-        />
-      ))} */}
+      </div>
     </div>
   );
 };

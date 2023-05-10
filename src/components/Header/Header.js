@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { NotesContext } from '../../context/notesContext';
 import SearchBox from '../SearchBox/SearchBox';
-// import style from './Header.module.css';
+import style from './Header.module.css';
 import Modal from '../Modal/Modal';
 import EditModal from '../Modal/EditModal';
 import AddModal from '../Modal/AddModal';
@@ -20,7 +20,8 @@ function Header({ children }) {
   const [buttonStates, setButtonStates] = useState(initButtonStates);
 
   const toggleModal = event => {
-    const value = event?.target?.value;
+    const value = event.target.value;
+    console.log(event.target);
     setButtonStates(prevState => ({
       ...initButtonStates,
       [value]: true,
@@ -61,42 +62,54 @@ function Header({ children }) {
   return (
     <div>
       <div>
-        <button onClick={toggleModal} value="add">
-          add
+        <button
+          onClick={toggleModal}
+          value="add"
+          className={`${style.buttonHeader} ${style.addButton}`}
+        >
+          <svg className={style.svgHeader}>
+            <use
+              href={`${process.env.PUBLIC_URL}/symbol-defs.svg#icon-plus`}
+            ></use>
+          </svg>
         </button>
-        <button onClick={toggleModal} value="delete" disabled={!currentNote}>
-          delete
+        <button
+          className={`${style.buttonHeader} ${style.deleteButton} ${
+            !currentNote ? style.disabled : ''
+          }`}
+          onClick={toggleModal}
+          value="delete"
+          disabled={!currentNote}
+        >
+          <svg className={style.svgHeader}>
+            <use
+              href={`${process.env.PUBLIC_URL}/symbol-defs.svg#icon-bin`}
+            ></use>
+          </svg>
         </button>
-        <button onClick={toggleModal} value="edit" disabled={!currentNote}>
-          edit
+        <button
+          className={`${style.buttonHeader} ${style.editButton} ${
+            !currentNote ? style.disabled : ''
+          }`}
+          onClick={toggleModal}
+          value="edit"
+          disabled={!currentNote}
+        >
+          <svg className={style.svgHeader}>
+            <use
+              href={`${process.env.PUBLIC_URL}/symbol-defs.svg#icon-pencil`}
+            ></use>
+          </svg>
         </button>
         <SearchBox />
         <Modal isOpen={isOpen} onClose={onCloseModal}>
           {buttonStates.add && <AddModal onSubmit={onSubmitHandlerAdd} />}
-          {buttonStates.delete && <DeleteModal onClick={handleModalClose} />}
+          {buttonStates.delete && <DeleteModal onClose={handleModalClose} />}
           {buttonStates.edit && <EditModal onSubmit={onSubmitHandlerEdit} />}
         </Modal>
       </div>
       {children}
     </div>
-
-    // <>
-    //   <div>
-    //     <div className={style.headerConteiner}>DeleteModal
-    //       <div className={style.buttonConteiner}>
-    //         <button className={style.headerButton}>&#43;</button>
-    //         <button className={style.headerButton} disabled={!currentNote}>
-    //           &#x1F5D1;
-    //         </button>
-    //         <button className={style.headerButton} disabled={!currentNote}>
-    //           &#x270F;
-    //         </button>
-    //       </div>
-    //       <SearchBox />
-    //     </div>
-    //     {children}
-    //   </div>
-    // </>
   );
 }
 

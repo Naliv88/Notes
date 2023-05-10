@@ -5,11 +5,13 @@ function ListItem({ note, onClick, selected }) {
   const { title, id } = note;
 
   return (
-    <li>
-      <button onClick={() => onClick(note)} id={id}>
-        {title}
-      </button>
-    </li>
+    <button
+      className={style.ListItemButton}
+      onClick={() => onClick(note)}
+      id={id}
+    >
+      {title}
+    </button>
   );
 }
 

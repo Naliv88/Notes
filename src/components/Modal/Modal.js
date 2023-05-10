@@ -46,7 +46,11 @@ export default function Modal({ isOpen, onClose, children }) {
         <div className={style.modalContainer} ref={modalContainerRef}>
           <div className={style.modalBody}>{children}</div>
           <button className={style.modalCloseButton} onClick={onClose}>
-            Cancel
+            <svg className={style.modalCloseButtonSvg}>
+              <use
+                href={`${process.env.PUBLIC_URL}/symbol-defs.svg#icon-cross`}
+              ></use>
+            </svg>
           </button>
         </div>
       </div>

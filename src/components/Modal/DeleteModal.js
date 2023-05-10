@@ -12,12 +12,12 @@ export default function DeleteModal({ onClose }) {
   };
 
   return (
-    <div className={style.modalBackground}>
-      <div className={style.modal}>
+    <div className={style.deleteModalBackground}>
+      <div className={style.deleteMmodal}>
         <h2>Видалення запису</h2>
         <p>Ви дійсно хочете видалити запис?</p>
         <p>{currentNote.title}</p>
-        <div className={style.buttons}>
+        <div className={style.deleteMmodalbuttons}>
           <button onClick={handleDelete}>Так</button>
           <button onClick={onClose}>Ні</button>
         </div>

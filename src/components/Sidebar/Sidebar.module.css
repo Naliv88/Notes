@@ -1,0 +1,9 @@
+.sidebar{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.selected {
+    background-color: gray;
+}

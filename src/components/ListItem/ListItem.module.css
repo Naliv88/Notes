@@ -1,5 +1,5 @@
-.selected {
-    background-color: gray;
+.selected{
+    background-color: bisque;
 }
 
 .listItem{
@@ -7,7 +7,8 @@
     }
 
     .ListItemButton{
-    width: 50%;
-    height: 30px;
-    background-color: aquamarine;
+    width: 100%;
+    /* height: 40px; */
+    /* background-color: aquamarine; */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
     }

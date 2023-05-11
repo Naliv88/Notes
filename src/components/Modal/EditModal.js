@@ -7,7 +7,6 @@ export default function EditModal({ onSubmit }) {
   const [title, setTitle] = useState(currentNote.title);
   const [body, setBody] = useState(currentNote.body);
 
-  console.log(currentNote);
   return (
     <div>
       <h3>Modal Title edit</h3>

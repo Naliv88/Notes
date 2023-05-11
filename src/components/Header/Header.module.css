@@ -74,3 +74,10 @@ body.modal-open {
     padding: 5px;
     /* border: 1px solid black; */
 }
+
+.HeaderContainer{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+}

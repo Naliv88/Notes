@@ -18,6 +18,7 @@ export const NotesProvider = ({ children }) => {
   const [currentNote, setCurrentNote] = useState(null);
   const [searchFilter, setSearchFilter] = useState('');
   const [filteredNotes, setFilteredNotes] = useState([]);
+  const [allowEditing, setAllowEditing] = useState(false);
 
   // Виконуємо запит до бази даних для отримання всіх нотаток при монтуванні компонента
   useEffect(() => {
@@ -29,6 +30,7 @@ export const NotesProvider = ({ children }) => {
 
   // Оновлюємо фільтрований масив нотаток при зміні рядка пошуку або нотаток
   useEffect(() => {
+    console.log(notes);
     setFilteredNotes(
       notes.filter(note =>
         note.title.toLowerCase().includes(searchFilter.toLowerCase())
@@ -66,6 +68,7 @@ export const NotesProvider = ({ children }) => {
     <NotesContext.Provider
       value={{
         notes,
+        setNotes,
         currentNote,
         setCurrentNote,
         searchFilter,
@@ -74,6 +77,8 @@ export const NotesProvider = ({ children }) => {
         addNote,
         editNote,
         deleteNote,
+        allowEditing,
+        setAllowEditing,
       }}
     >
       {children}

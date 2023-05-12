@@ -7,6 +7,8 @@ import {
   updateNoteInDB,
 } from '../database/database';
 import { nanoid } from 'nanoid';
+import { putData } from '../utils/EditAPI';
+import { getAllItemsFromTable } from '../utils/get';
 
 // Створюємо контекст для передачі даних між компонентами
 export const NotesContext = createContext();
@@ -45,6 +47,11 @@ export const NotesProvider = ({ children }) => {
     const noteWithTime = { ...newNote, time, id };
     setNotes([...notes, noteWithTime]);
     addNoteToDB(noteWithTime);
+
+    const data = getAllItemsFromTable();
+    data.then(responsive => {
+      console.log(responsive.records);
+    });
   };
 
   // Функція для редагування нотатки

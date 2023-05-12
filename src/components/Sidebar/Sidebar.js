@@ -12,6 +12,8 @@ export const Sidebar = () => {
     setSelectedNote(note);
   };
 
+  console.log(filteredNotes);
+
   return (
     <div className={style.sidebar}>
       {filteredNotes.map(note => (
@@ -25,19 +27,3 @@ export const Sidebar = () => {
     </div>
   );
 };
-
-// export function ListItem({ note, onClick, selected }) {
-//   const { title, id } = note;
-
-//   return (
-//     <button
-//       className={`${style.ListItemButton} ${selected ? style.selected : ''}`}
-//       onClick={() => onClick(note)}
-//       id={id}
-//     >
-//       {title}
-//     </button>
-//   );
-// }
-
-// export default Sidebar;

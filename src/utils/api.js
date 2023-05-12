@@ -1,4 +1,4 @@
-// У папці "utils" містяться допоміжні файли, такі як API для роботи з базою даних QuintaDB.
+// У папці "utils" містяться допоміжні файли, для роботи з базою даних QuintaDB.
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -8,13 +8,17 @@ export default function NotesProvider({ children }) {
   const [notes, setNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
 
+  const projectId = '<your_project_id>';
+  const token = '<your_api_key>';
+  const formId = '<your_form_id>';
+
   useEffect(() => {
     axios
       .get('https://api.quintadb.com/v1/records', {
         params: {
-          projectid: '<your_project_id>',
-          token: '<your_api_key>',
-          formid: '<your_form_id>',
+          projectid: projectId,
+          token: token,
+          formid: formId,
         },
       })
       .then(response => {
@@ -28,9 +32,9 @@ export default function NotesProvider({ children }) {
   const addNote = note => {
     axios
       .post('https://api.quintadb.com/v1/forms', {
-        projectid: '<your_project_id>',
-        token: '<your_api_key>',
-        formid: '<your_form_id>',
+        projectid: projectId,
+        token: token,
+        formid: formId,
         record: note,
       })
       .then(response => {
@@ -45,9 +49,9 @@ export default function NotesProvider({ children }) {
     axios
       .delete(`https://api.quintadb.com/v1/forms/${id}`, {
         params: {
-          projectid: '<your_project_id>',
-          token: '<your_api_key>',
-          formid: '<your_form_id>',
+          projectid: projectId,
+          token: token,
+          formid: formId,
         },
       })
       .then(() => {
@@ -62,9 +66,9 @@ export default function NotesProvider({ children }) {
   const updateNote = note => {
     axios
       .put(`https://api.quintadb.com/v1/forms/${note._id}`, {
-        projectid: '<your_project_id>',
-        token: '<your_api_key>',
-        formid: '<your_form_id>',
+        projectid: projectId,
+        token: token,
+        formid: formId,
         record: note,
       })
       .then(() => {

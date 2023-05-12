@@ -41,12 +41,9 @@ async function openNotesDB() {
 
 // додає нову нотатку до бази даних
 async function addNoteToDB(note) {
-  console.log('Додаємо нотатку до бази даних:', note);
   const db = await openNotesDB();
   const tx = db.transaction(NOTES_STORE_NAME, 'readwrite');
-  console.log('Транзакція створена:', tx);
   await tx.store.add(note);
-  console.log('Нотатку додано до бази даних.');
   await tx.done;
 }
 

@@ -1,0 +1,28 @@
+.workspace{
+    /* min-width: 70%; */
+    display: flex;
+    flex-direction: column;
+
+    flex: 2;
+}
+
+.inputTitle{
+    width: 100%;
+    border: none;
+        display: block;
+        background-color: white;
+            box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.inputBody{
+    width: 100%;
+    border: none;
+        display: block;
+    background-color: white;
+        box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.disabled {
+    opacity: 0.8;
+    pointer-events: none;
+}

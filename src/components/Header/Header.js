@@ -33,8 +33,10 @@ function Header({ children }) {
   };
 
   const addNoteButton = e => {
-    console.log(e.target);
-    setNotes([...notes, { title: '', body: '' }]);
+    const initNotes = { title: '', body: '' };
+    // const newNotes = notes.concat(initNotes);
+    // setNotes(newNotes);
+    addNote(initNotes);
   };
 
   const onCloseModal = () => {

@@ -16,8 +16,8 @@ export function ListItem({ note, onClick, selected }) {
       onClick={() => onClick(note)}
       id={id}
     >
-      <p>{title}</p>
-      <p>{formattedDate}</p>
+      <h4>{title}</h4>
+      <p className={style.listTime}>{formattedDate}</p>
     </button>
   );
 }

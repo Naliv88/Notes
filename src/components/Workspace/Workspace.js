@@ -1,56 +1,57 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { NotesContext } from '../../context/notesContext';
 import { debounce } from 'lodash';
 import style from './Workspace.module.css';
 
 const Workspace = () => {
-  const { currentNote, allowEditing, editNote } = useContext(NotesContext);
-  const [textTitle, setTextTitle] = useState('');
-  const [textBody, setTextBody] = useState('');
+  // Отримуємо стан поточної нотатки, дозвіл на редагування та функцію редагування нотатки з контексту
+  const { currentNote, setCurrentNote, allowEditing, editNote } =
+    useContext(NotesContext);
 
-  useEffect(() => {
-    if (currentNote) {
-      setTextTitle(currentNote.title);
-      setTextBody(currentNote.body);
-    }
-  }, [currentNote]);
-
+  // Функція обробки зміни заголовка нотатки
   const handleTitleChange = e => {
     if (allowEditing) {
-      debounceEditNoteTitle(e.target.value);
-      setTextTitle(e.target.value);
+      debounceEditNoteTitle(e.target.value); // Використовуємо debounce з lodash для затримки збереження змін
+      setCurrentNote({ ...currentNote, title: e.target.value }); // Зберігаємо зміну в стані поточної нотатки
     }
   };
 
+  // Функція обробки зміни тіла нотатки
   const handleBodyChange = e => {
     if (allowEditing) {
-      debounceEditNoteBody(e.target.value);
-      setTextBody(e.target.value);
+      debounceEditNoteBody(e.target.value); // Використовуємо debounce з lodash для затримки збереження змін
+      setCurrentNote({ ...currentNote, body: e.target.value }); // Зберігаємо зміну в стані поточної нотатки
     }
   };
 
+  // Використовуємо debounce з lodash для затримки збереження змін заголовка нотатки
   const debounceEditNoteTitle = debounce(value => {
-    editNote({ ...currentNote, title: value });
+    editNote({ ...currentNote, title: value }); // Функція збереження змін в стані нотатки
   }, 200);
 
+  // Використовуємо debounce з lodash для затримки збереження змін тіла нотатки
   const debounceEditNoteBody = debounce(value => {
-    editNote({ ...currentNote, body: value });
+    editNote({ ...currentNote, body: value }); // Функція збереження змін в стані нотатки
   }, 200);
 
+  // Повертаємо JSX елементи
   return (
     <div className={style.workspace}>
+      {/* Перевіряємо, чи є поточна нотатка, якщо є, то рендеримо поле для редагування заголовка */}
       {currentNote && (
         <textarea
           className={`${style.inputTitle} ${!allowEditing && style.disabled}`}
-          value={textTitle}
+          rows="5"
+          value={currentNote.title}
           onChange={handleTitleChange}
           disabled={!allowEditing}
         ></textarea>
       )}
+      {/* Перевіряємо, чи є поточна нотатка, якщо є, то рендеримо поле для редагування нотатка */}
       {currentNote && (
         <textarea
           className={`${style.inputBody} ${!allowEditing && style.disabled}`}
-          value={textBody}
+          value={currentNote.body}
           onChange={handleBodyChange}
           disabled={!allowEditing}
         ></textarea>

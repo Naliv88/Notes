@@ -4,7 +4,8 @@ import style from './Sidebar.module.css';
 import ListItem from '../ListItem/ListItem';
 
 export const Sidebar = () => {
-  const { setCurrentNote, filteredNotes } = useContext(NotesContext);
+  const { setCurrentNote, filteredNotes, filteredNotesMemo } =
+    useContext(NotesContext);
   const [selectedNote, setSelectedNote] = useState(null);
 
   const handleNoteClick = note => {
@@ -12,11 +13,9 @@ export const Sidebar = () => {
     setSelectedNote(note);
   };
 
-  console.log(filteredNotes);
-
   return (
     <div className={style.sidebar}>
-      {filteredNotes.map(note => (
+      {filteredNotesMemo.map(note => (
         <ListItem
           key={note.id}
           note={note}

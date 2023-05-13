@@ -7,66 +7,14 @@ import DeleteModal from '../Modal/DeleteModal';
 import SelectDB from './SelectDB';
 
 function Header({ children }) {
-  const initButtonStates = {
-    add: false,
-    delete: false,
-    edit: false,
-  };
-  const { notes, setNotes, currentNote, setAllowEditing, addNote, editNote } =
+  const { currentNote, allowEditing, setAllowEditing, addNote } =
     useContext(NotesContext);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [buttonStates, setButtonStates] = useState(initButtonStates);
-
-  const toggleModal = event => {
-    const value = event.target.value;
-    console.log(event.target);
-    setButtonStates(prevState => ({
-      ...initButtonStates,
-      [value]: true,
-    }));
-    setIsOpen(true);
-  };
-
-  const toggleEdit = event => {
-    setAllowEditing(prevState => !prevState);
-  };
 
   const addNoteButton = e => {
     const initNotes = { title: '', body: '' };
-    // const newNotes = notes.concat(initNotes);
-    // setNotes(newNotes);
     addNote(initNotes);
-  };
-
-  const onCloseModal = () => {
-    setButtonStates(initButtonStates);
-    setIsOpen(false);
-  };
-
-  // const onSubmitHandlerAdd = event => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.target);
-  //   const dataObj = Object.fromEntries(data.entries());
-  //   console.log(dataObj);
-  //   addNote(dataObj);
-  //   // setFormData(data);
-  //   onCloseModal();
-  // };
-
-  // const onSubmitHandlerEdit = event => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.target);
-  //   const dataObj = Object.fromEntries(data.entries());
-  //   const newNote = { ...currentNote, ...dataObj };
-
-  //   console.log(newNote);
-  //   editNote(newNote);
-  //   onCloseModal();
-  // };
-
-  const handleModalClose = () => {
-    setIsOpen(false);
   };
 
   return (
@@ -88,7 +36,9 @@ function Header({ children }) {
             className={`${style.buttonHeader} ${
               !currentNote ? style.disabled : ''
             }`}
-            onClick={toggleModal}
+            onClick={() => {
+              setIsOpen(true);
+            }}
             value="delete"
             disabled={!currentNote}
           >
@@ -99,10 +49,12 @@ function Header({ children }) {
             </svg>
           </button>
           <button
-            className={`${style.buttonHeader} ${
-              !currentNote ? style.disabled : ''
-            }`}
-            onClick={toggleEdit}
+            className={`${style.buttonHeader} 
+            ${!currentNote ? style.disabled : ''} 
+            ${allowEditing ? style.select : ''}`}
+            onClick={() => {
+              setAllowEditing(prevState => !prevState);
+            }}
             value="edit"
             disabled={!currentNote}
           >
@@ -115,8 +67,17 @@ function Header({ children }) {
         </div>
         <SelectDB />
         <SearchBox />
-        <Modal isOpen={isOpen} onClose={onCloseModal}>
-          <DeleteModal onClose={handleModalClose} />
+        <Modal
+          isOpen={isOpen}
+          onClose={() => {
+            setIsOpen(false);
+          }}
+        >
+          <DeleteModal
+            onClose={() => {
+              setIsOpen(false);
+            }}
+          />
         </Modal>
       </div>
       {children}

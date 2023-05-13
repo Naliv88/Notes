@@ -1,13 +1,8 @@
 
-
-.active {
-    background-color: red;
-}
-
-
 .workSpace {
     display: flex;
     justify-content: space-evenly;
+    border: 1px solid black;
 }
 
 
@@ -64,6 +59,7 @@ body.modal-open {
 .disabled {
     cursor: not-allowed;
     opacity: 0.5;
+    fill: red;
 }
 
 .svgHeader {
@@ -80,4 +76,10 @@ body.modal-open {
     justify-content: space-around;
     align-items: center;
     padding: 10px;
+}
+
+.select{
+    /* background-color: aqua; */
+    fill: goldenrod;
+
 }

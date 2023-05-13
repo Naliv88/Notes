@@ -1,5 +1,5 @@
 // У папці "context" містяться файли, пов'язані з контекстом, який використовується для передачі даних між компонентами.
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useMemo, useState } from 'react';
 import {
   addNoteToDB,
   deleteNoteFromDB,
@@ -7,8 +7,12 @@ import {
   updateNoteInDB,
 } from '../database/database';
 import { nanoid } from 'nanoid';
-import { putData } from '../utils/EditAPI';
-import { getAllItemsFromTable } from '../utils/get';
+import {
+  getAllItemsFromTable,
+  postData,
+  deleteItemsFromTable,
+  editItemsFromTable,
+} from '../utils/api';
 
 // Створюємо контекст для передачі даних між компонентами
 export const NotesContext = createContext();
@@ -21,22 +25,42 @@ export const NotesProvider = ({ children }) => {
   const [searchFilter, setSearchFilter] = useState('');
   const [filteredNotes, setFilteredNotes] = useState([]);
   const [allowEditing, setAllowEditing] = useState(false);
+  const [selectDB, setSelectDB] = useState('indexddb');
 
   // Виконуємо запит до бази даних для отримання всіх нотаток при монтуванні компонента
   useEffect(() => {
-    getAllNotesFromDB().then(notes => {
-      console.log(notes);
-      setNotes(notes);
-    });
-  }, []);
+    if (selectDB === 'indexddb') {
+      getAllNotesFromDB().then(notes => {
+        console.log(notes);
+        setNotes(notes);
+      });
+    }
+    if (selectDB === 'quintadb') {
+      getAllItemsFromTable().then(notes => {
+        console.log(notes);
+        setNotes(notes);
+      });
+    }
+  }, [selectDB]);
 
   // Оновлюємо фільтрований масив нотаток при зміні рядка пошуку або нотаток
   useEffect(() => {
     console.log(notes);
-    setFilteredNotes(
-      notes.filter(note =>
-        note.title.toLowerCase().includes(searchFilter.toLowerCase())
-      )
+    const filtered = notes.filter(
+      note =>
+        note.title.toLowerCase().includes(searchFilter.toLowerCase()) ||
+        note.body.toLowerCase().includes(searchFilter.toLowerCase())
+    );
+    setFilteredNotes(filtered);
+  }, [searchFilter, notes]);
+
+  // Оновлюємо фільтрований масив нотаток при зміні рядка пошуку або нотаток
+  const filteredNotesMemo = useMemo(() => {
+    console.log(notes);
+    return notes.filter(
+      note =>
+        note.title.toLowerCase().includes(searchFilter.toLowerCase()) ||
+        note.body.toLowerCase().includes(searchFilter.toLowerCase())
     );
   }, [searchFilter, notes]);
 
@@ -46,12 +70,13 @@ export const NotesProvider = ({ children }) => {
     const time = Date.now();
     const noteWithTime = { ...newNote, time, id };
     setNotes([...notes, noteWithTime]);
-    addNoteToDB(noteWithTime);
-
-    const data = getAllItemsFromTable();
-    data.then(responsive => {
-      console.log(responsive.records);
-    });
+    setCurrentNote(noteWithTime);
+    if (selectDB === 'indexddb') {
+      addNoteToDB(noteWithTime);
+    }
+    if (selectDB === 'quintadb') {
+      postData();
+    }
   };
 
   // Функція для редагування нотатки
@@ -61,14 +86,29 @@ export const NotesProvider = ({ children }) => {
     updatedNotes[index] = editNote;
     console.log(updatedNotes);
     setNotes(updatedNotes);
-    updateNoteInDB(editNote);
+
+    if (selectDB === 'indexddb') {
+      updateNoteInDB(editNote);
+    }
+    if (selectDB === 'quintadb') {
+      editItemsFromTable(editNote);
+      console.log('edit notes', editNote);
+    }
   };
 
   // Функція для видалення нотатки
   const deleteNote = noteId => {
+    if (selectDB === 'indexddb') {
+      deleteNoteFromDB(noteId);
+    }
+    if (selectDB === 'quintadb') {
+      deleteItemsFromTable(noteId);
+
+      console.log('delete notes');
+    }
+
     const updatedNotes = notes.filter(note => note.id !== noteId);
     setNotes(updatedNotes);
-    deleteNoteFromDB(noteId);
   };
 
   return (
@@ -81,11 +121,14 @@ export const NotesProvider = ({ children }) => {
         searchFilter,
         setSearchFilter,
         filteredNotes,
+        filteredNotesMemo,
         addNote,
         editNote,
         deleteNote,
         allowEditing,
         setAllowEditing,
+        selectDB,
+        setSelectDB,
       }}
     >
       {children}

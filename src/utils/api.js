@@ -1,92 +1,99 @@
 // У папці "utils" містяться допоміжні файли, для роботи з базою даних QuintaDB.
+
 import axios from 'axios';
-import { useEffect, useState } from 'react';
 
-import { NoteContext } from '../../context/notesContext';
+const API_KEY = 'caW6CPgqDmqykml8kXEHjd';
+const APP_ID = 'c4WQ_cUCjfBykjx1RcJSoH';
+const TABLE_NAME = 'bcrSkYW7HdNOo9WQpcICon';
 
-export default function NotesProvider({ children }) {
-  const [notes, setNotes] = useState([]);
-  const [selectedNote, setSelectedNote] = useState(null);
-
-  const projectId = '<your_project_id>';
-  const token = '<your_api_key>';
-  const formId = '<your_form_id>';
-
-  useEffect(() => {
-    axios
-      .get('https://api.quintadb.com/v1/records', {
-        params: {
-          projectid: projectId,
-          token: token,
-          formid: formId,
+export async function getAllItemsFromTable() {
+  try {
+    const response = await axios.get(
+      `https://quintadb.com.ua/apps/${APP_ID}/dtypes/entity/${TABLE_NAME}.json?rest_api_key=${API_KEY}&view=`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
         },
-      })
-      .then(response => {
-        setNotes(response.data);
-      })
-      .catch(error => {
-        console.error('Error retrieving notes:', error);
-      });
-  }, []);
+        data: {},
+      }
+    );
+    const data = response.data.records.map(note => {
+      const dateObject = new Date(note.created_at);
+      const milliseconds = dateObject.getTime();
+      return {
+        id: note.id,
+        time: milliseconds,
+        title: note.values.cxWPjwcmnbeA_dOmoAdK9B
+          ? note.values.cxWPjwcmnbeA_dOmoAdK9B
+          : '',
+        body: note.values.dcQ8knWRTdNyk_WOejW7bF
+          ? note.values.dcQ8knWRTdNyk_WOejW7bF
+          : '',
+      };
+    });
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
 
-  const addNote = note => {
-    axios
-      .post('https://api.quintadb.com/v1/forms', {
-        projectid: projectId,
-        token: token,
-        formid: formId,
-        record: note,
-      })
-      .then(response => {
-        setNotes([...notes, response.data]);
-      })
-      .catch(error => {
-        console.error('Error adding note:', error);
-      });
-  };
+const url = `https://quintadb.com.ua/apps/${APP_ID}/dtypes.json`;
+const values = {
+  cxWPjwcmnbeA_dOmoAdK9B: ' ',
+  dcQ8knWRTdNyk_WOejW7bF: ' ',
+};
 
-  const deleteNote = id => {
-    axios
-      .delete(`https://api.quintadb.com/v1/forms/${id}`, {
-        params: {
-          projectid: projectId,
-          token: token,
-          formid: formId,
+export const postData = async () => {
+  try {
+    const response = await axios.post(url, {
+      rest_api_key: API_KEY,
+      entity_id: TABLE_NAME,
+      values: values,
+    });
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export async function editItemsFromTable(editNote) {
+  const { id, title, body } = editNote;
+  const url = `https://quintadb.com.ua/apps/${APP_ID}/dtypes/${id}.json?rest_api_key=${API_KEY}`;
+
+  try {
+    const response = await axios.put(url, {
+      values: {
+        cxWPjwcmnbeA_dOmoAdK9B: title,
+        dcQ8knWRTdNyk_WOejW7bF: body,
+      },
+    });
+
+    console.log(response.data);
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function deleteItemsFromTable(noteId) {
+  try {
+    const response = await axios.delete(
+      `https://quintadb.com.ua/apps/${APP_ID}/dtypes/${noteId}.json?rest_api_key=${API_KEY}&view=`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
         },
-      })
-      .then(() => {
-        setNotes(notes.filter(note => note._id !== id));
-        setSelectedNote(null);
-      })
-      .catch(error => {
-        console.error('Error deleting note:', error);
-      });
-  };
+        data: {},
+      }
+    );
 
-  const updateNote = note => {
-    axios
-      .put(`https://api.quintadb.com/v1/forms/${note._id}`, {
-        projectid: projectId,
-        token: token,
-        formid: formId,
-        record: note,
-      })
-      .then(() => {
-        setNotes(notes.map(n => (n._id === note._id ? note : n)));
-      })
-      .catch(error => {
-        console.error('Error updating note:', error);
-      });
-  };
-
-  const value = {
-    notes,
-    selectedNote,
-    setSelectedNote,
-    addNote,
-    deleteNote,
-    updateNote,
-  };
-
-  return <NoteContext.Provider value={value}>{children}</NoteContext.Provider>;
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }

@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/testWorkOblikSoft/static/css/main.1a0ee77e.css",
+    "main.js": "/testWorkOblikSoft/static/js/main.2989d12e.js",
+    "static/js/787.0c3f432a.chunk.js": "/testWorkOblikSoft/static/js/787.0c3f432a.chunk.js",
+    "index.html": "/testWorkOblikSoft/index.html",
+    "main.1a0ee77e.css.map": "/testWorkOblikSoft/static/css/main.1a0ee77e.css.map",
+    "main.2989d12e.js.map": "/testWorkOblikSoft/static/js/main.2989d12e.js.map",
+    "787.0c3f432a.chunk.js.map": "/testWorkOblikSoft/static/js/787.0c3f432a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1a0ee77e.css",
+    "static/js/main.2989d12e.js"
+  ]
+}

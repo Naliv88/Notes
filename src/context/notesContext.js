@@ -31,13 +31,11 @@ export const NotesProvider = ({ children }) => {
   useEffect(() => {
     if (selectDB === 'indexddb') {
       getAllNotesFromDB().then(notes => {
-        console.log(notes);
         setNotes(notes);
       });
     }
     if (selectDB === 'quintadb') {
       getAllItemsFromTable().then(notes => {
-        console.log(notes);
         setNotes(notes);
       });
     }
@@ -45,7 +43,6 @@ export const NotesProvider = ({ children }) => {
 
   // Оновлюємо фільтрований масив нотаток при зміні рядка пошуку або нотаток
   useEffect(() => {
-    console.log(notes);
     const filtered = notes.filter(
       note =>
         note.title.toLowerCase().includes(searchFilter.toLowerCase()) ||
@@ -56,7 +53,6 @@ export const NotesProvider = ({ children }) => {
 
   // Оновлюємо фільтрований масив нотаток при зміні рядка пошуку або нотаток
   const filteredNotesMemo = useMemo(() => {
-    console.log(notes);
     return notes.filter(
       note =>
         note.title.toLowerCase().includes(searchFilter.toLowerCase()) ||
@@ -84,7 +80,7 @@ export const NotesProvider = ({ children }) => {
     const updatedNotes = [...notes];
     const index = updatedNotes.findIndex(note => note.id === editNote.id);
     updatedNotes[index] = editNote;
-    console.log(updatedNotes);
+
     setNotes(updatedNotes);
 
     if (selectDB === 'indexddb') {
@@ -92,7 +88,6 @@ export const NotesProvider = ({ children }) => {
     }
     if (selectDB === 'quintadb') {
       editItemsFromTable(editNote);
-      console.log('edit notes', editNote);
     }
   };
 
@@ -103,8 +98,6 @@ export const NotesProvider = ({ children }) => {
     }
     if (selectDB === 'quintadb') {
       deleteItemsFromTable(noteId);
-
-      console.log('delete notes');
     }
 
     const updatedNotes = notes.filter(note => note.id !== noteId);

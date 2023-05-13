@@ -31,7 +31,6 @@ export async function getAllItemsFromTable() {
           : '',
       };
     });
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -69,8 +68,6 @@ export async function editItemsFromTable(editNote) {
         dcQ8knWRTdNyk_WOejW7bF: body,
       },
     });
-
-    console.log(response.data);
 
     return response.data;
   } catch (error) {

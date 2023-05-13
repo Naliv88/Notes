@@ -5,7 +5,6 @@ const SearchBox = () => {
   const { searchFilter, setSearchFilter } = useContext(NotesContext);
 
   function handleSearchFilterChange(e) {
-    console.log(e.target);
     setSearchFilter(e.target.value);
   }
   return (
